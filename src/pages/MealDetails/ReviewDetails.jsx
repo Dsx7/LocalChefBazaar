@@ -5,10 +5,11 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-
 const ReviewDetails = ({ mealId, user, mealName, data }) => {
     const [open, setOpen] = useState(false);
     const axiosSecure = useAxiosSecure();
+
+    // --- 1. Fetch Reviews ---
     const { data: reviews = [], isLoading, refetch } = useQuery({
         queryKey: ["reviews", mealId],
         enabled: !!mealId,
@@ -18,6 +19,7 @@ const ReviewDetails = ({ mealId, user, mealName, data }) => {
         },
     });
 
+    // --- 2. Fetch Favorite Count ---
     const { data: favorites = [], isLoading: favoriteLoading, refetch: favoriteFetch } = useQuery({
         queryKey: ["favorites"],
         enabled: !!mealId,
@@ -27,8 +29,7 @@ const ReviewDetails = ({ mealId, user, mealName, data }) => {
         },
     });
 
-    
-
+    // --- 3. Add to Favorite Mutation ---
     const favoriteMutation = useMutation({
         mutationFn: async (favData) => {
             const res = await axiosSecure.post("/favorites", favData);
@@ -55,7 +56,6 @@ const ReviewDetails = ({ mealId, user, mealName, data }) => {
 
         favoriteMutation.mutate(favoriteInfo);
     };
-
 
     if (isLoading || favoriteLoading) {
         return (
@@ -115,23 +115,36 @@ const ReviewDetails = ({ mealId, user, mealName, data }) => {
                 )
             }
 
-            {/* Give Review Button */}
-            <div className="mt-8 flex justify-between">
+            {/* --- UPDATED BUTTONS SECTION (Responsive Fix) --- */}
+            <div className="mt-8 flex flex-col md:flex-row gap-4 md:justify-between items-center">
                 <button
                     onClick={() => setOpen(true)}
-                    className="btn bg-[#628141] border-[#628141] shadow-none py-8 px-8 rounded-xl text-lg font-semibold text-white"
+                    className="
+                        btn bg-[#628141] border-[#628141] shadow-none 
+                        text-white font-semibold 
+                        w-full md:w-auto 
+                        py-4 md:py-8 px-6 md:px-8 
+                        rounded-xl text-base md:text-lg 
+                        h-auto min-h-0
+                    "
                 >
                     Give Review
                 </button>
-                {/* Add Favorite */}
+
                 <button
-                    onClick={() => {
-                        handleFavorite()
-                    }}
-                    className="btn bg-[#628141] border-[#628141] shadow-none py-8 px-8 rounded-xl text-lg font-semibold text-white"
+                    onClick={handleFavorite}
+                    className="
+                        btn bg-[#628141] border-[#628141] shadow-none 
+                        text-white font-semibold 
+                        w-full md:w-auto 
+                        py-4 md:py-8 px-6 md:px-8 
+                        rounded-xl text-base md:text-lg 
+                        h-auto min-h-0 
+                        flex items-center justify-center gap-2
+                    "
                 >
                     <FaHeart />
-                    Add to Favorite ({favorites.count ? favorites.count : "0"})
+                    <span>Add to Favorite ({favorites.count ? favorites.count : "0"})</span>
                 </button>
             </div>
 
