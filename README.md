@@ -10,7 +10,7 @@ LocalChefBazaar is a modern online platform connecting home cooks with customers
 
 ## 🌐 Live Demo
 
-- **Client URL:** []()
+- **Client URL:** [https://local-chef-bazaar-rust.vercel.app/](https://local-chef-bazaar-rust.vercel.app/)
 
 ---
 ### 🔑 Demo Login Info
