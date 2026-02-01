@@ -3,6 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock, FaUserShield, FaUserTie, FaUser } from 'react-icons/fa';
 
 const Login = () => {
     const [showPass, setShowPass] = useState(false);
@@ -19,11 +20,9 @@ const Login = () => {
         const { email, password } = data;
         try {
             setSubmissionLoader(true)
-
-            // login function
             await login(email, password)
             navigate("/")
-            toast.success("Login seccessful")
+            toast.success("Login successful")
             setSubmissionLoader(false)
         } catch (err) {
             setSubmissionLoader(false)
@@ -33,14 +32,13 @@ const Login = () => {
         }
     }
 
+    // Role-based login handlers (unchanged logic)
     const handleAdmin = async () => {
         try {
             setSubmissionLoader(true)
-
-            // login function
             await login('admin@gmail.com', 'Admin@1234')
             navigate("/")
-            toast.success("Login seccessful")
+            toast.success("Login successful")
             setSubmissionLoader(false)
         } catch (err) {
             setSubmissionLoader(false)
@@ -53,11 +51,9 @@ const Login = () => {
     const handleChef = async () => {
         try {
             setSubmissionLoader(true)
-
-            // login function
             await login('chef1@gmail.com', 'Chef@1234')
             navigate("/")
-            toast.success("Login seccessful")
+            toast.success("Login successful")
             setSubmissionLoader(false)
         } catch (err) {
             setSubmissionLoader(false)
@@ -70,11 +66,9 @@ const Login = () => {
     const handleCustomer = async () => {
         try {
             setSubmissionLoader(true)
-
-            // login function
             await login('user@gmail.com', 'User@1234')
             navigate("/")
-            toast.success("Login seccessful")
+            toast.success("Login successful")
             setSubmissionLoader(false)
         } catch (err) {
             setSubmissionLoader(false)
@@ -87,138 +81,152 @@ const Login = () => {
     return (
         <>
             <title>Login | LocalChefBazaar</title>
-            <div className="w-full min-h-screen bg-[#FCFCFC] dark:bg-[#1C1C1C]">
-
-
-                <div className="w-full h-64 md:h-80 relative">
-                    <img
-                        src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200"
-                        className="w-full h-full object-cover"
-                    />
-
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <h1 className="text-white text-3xl md:text-5xl font-bold drop-shadow-lg berkshire-swash-regular">
-                            Welcome Back
-                        </h1>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4 transition-colors duration-300">
+                
+                <div className="max-w-5xl w-full bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-gray-100 dark:border-gray-700">
+                    
+                    {/* Left Side - Visual */}
+                    <div className="w-full md:w-1/2 relative hidden md:block">
+                        <img 
+                            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200" 
+                            alt="Delicious Food" 
+                            className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#628141]/90 to-[#628141]/40 flex flex-col justify-end p-12 text-white">
+                            <h1 className="text-5xl font-bold mb-4 berkshire-swash-regular drop-shadow-md">
+                                Welcome Back!
+                            </h1>
+                            <p className="text-lg oswald font-light opacity-90 leading-relaxed">
+                                Log in to discover the best homemade meals in your area. Your favorite flavors are just a click away.
+                            </p>
+                        </div>
                     </div>
-                </div>
 
-
-                <div className="max-w-lg mx-auto mt-[-80px] bg-white dark:bg-[#2A2A2A] rounded-xl shadow-xl p-8 md:p-10 relative z-10 mb-10" data-aos="fade-up">
-
-                    <h2 className="text-2xl font-semibold text-primary dark:text-gray-100 mb-6 text-center">
-                        Login to Your Account
-                    </h2>
-
-                    <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
-
-                        <div>
-                            <label className="text-sm text-gray-600 dark:text-gray-300">Email
-                                <input
-                                    type="email"
-                                    placeholder="example@mail.com"
-                                    className="w-full mt-1 px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 
-                                  bg-gray-50 dark:bg-[#2A2A2A] text-gray-800 dark:text-gray-200 focus:ring-2 
-                                  focus:ring-[#FF6F61] outline-none"
-                                    {...register('email', {
-                                        required: "Email is required to login", pattern: {
-                                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                            message: "Please enter a valid email address"
-                                        }
-                                    })}
-                                />
-                            </label>
+                    {/* Right Side - Form */}
+                    <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+                        
+                        <div className="text-center md:text-left mb-10">
+                            <h2 className="text-3xl md:text-4xl font-bold text-[#628141] mb-2 berkshire-swash-regular">
+                                Login to Account
+                            </h2>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">
+                                Please enter your details to continue.
+                            </p>
                         </div>
 
-                        <div>
-                            <label className="text-sm text-gray-600 dark:text-gray-300">Password
+                        <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
+                            
+                            {/* Email Input */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide ml-1">
+                                    Email Address
+                                </label>
                                 <div className="relative">
-                                    <input
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                                        <FaEnvelope />
+                                    </div>
+                                    <input 
+                                        type="email"
+                                        placeholder="example@mail.com"
+                                        className="w-full pl-11 pr-4 py-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#628141] focus:border-transparent transition-all shadow-sm"
+                                        {...register('email', {
+                                            required: "Email is required", 
+                                            pattern: {
+                                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                                message: "Invalid email format"
+                                            }
+                                        })}
+                                    />
+                                </div>
+                                {errors.email && <span className="text-red-500 text-xs ml-1">{errors.email.message}</span>}
+                            </div>
+
+                            {/* Password Input */}
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center ml-1">
+                                    <label className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                                        Password
+                                    </label>
+                                    <button type="button" className="text-xs text-[#ff8400] hover:underline font-medium">
+                                        Forgot Password?
+                                    </button>
+                                </div>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                                        <FaLock />
+                                    </div>
+                                    <input 
                                         type={showPass ? "text" : "password"}
                                         placeholder="••••••••"
-                                        className="w-full mt-1 px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 
-                                      bg-gray-50 dark:bg-[#2A2A2A] text-gray-800 dark:text-gray-200 focus:ring-2 
-                                      focus:ring-[#FF6F61] outline-none"
-                                        {...register("password")}
+                                        className="w-full pl-11 pr-12 py-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#628141] focus:border-transparent transition-all shadow-sm"
+                                        {...register("password", { required: "Password is required" })}
                                     />
-                                    <span
+                                    <button 
+                                        type="button"
                                         onClick={() => setShowPass(!showPass)}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-500 dark:text-gray-300 cursor-pointer"
+                                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors cursor-pointer"
                                     >
-                                        {showPass ? "Hide" : "Show"}
-                                    </span>
+                                        {showPass ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
                                 </div>
-                            </label>
-                        </div>
+                                {errors.password && <span className="text-red-500 text-xs ml-1">{errors.password.message}</span>}
+                            </div>
 
-
-                        <div className="flex justify-end">
-                            <button
-                                type="button"
-                                className="text-primary hover:underline text-sm"
+                            {/* Main Login Button */}
+                            <button 
+                                type="submit"
+                                className="w-full py-4 bg-[#628141] hover:bg-[#4f6b32] text-white font-bold text-lg rounded-xl shadow-lg shadow-green-900/20 transition-all transform hover:-translate-y-1 active:scale-95"
                             >
-                                Forgot password?
-                            </button>
-                        </div>
-
-                        <button className="w-full btn shadow-none border-none bg-primary text-white py-3 rounded-lg text-lg font-semibold transition">
-                            Login
-                        </button>
-
-                        <div className="flex gap-2">
-                            <button
-                                className="
-                                        flex-1
-                                        bg-primary text-white 
-                                        py-3 rounded-lg 
-                                        text-lg font-semibold 
-                                        transition hover:bg-primary/90
-                                        shadow-none border-none cursor-pointer
-                                        "
-                                onClick={handleAdmin}
-                            >
-                                Admin
+                                Login
                             </button>
 
-                            <button
-                                className="
-                                        flex-1
-                                        bg-primary text-white 
-                                        py-3 rounded-lg 
-                                        text-lg font-semibold 
-                                        transition hover:bg-primary/90
-                                        shadow-none border-none cursor-pointer
-                                        "
-                                onClick={handleChef}
-                            >
-                                Chef
-                            </button>
+                            {/* Divider */}
+                            <div className="relative flex py-2 items-center">
+                                <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+                                <span className="flex-shrink-0 mx-4 text-gray-400 text-xs uppercase font-bold tracking-widest">Quick Access</span>
+                                <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+                            </div>
 
-                            <button
-                                className="
-                                        flex-1
-                                        bg-primary text-white 
-                                        py-3 rounded-lg 
-                                        text-lg font-semibold 
-                                        transition hover:bg-primary/90
-                                        shadow-none border-none cursor-pointer
-                                        "
-                                onClick={handleCustomer}
-                            >
-                                Customer
-                            </button>
-                        </div>
+                            {/* Quick Login Buttons */}
+                            <div className="grid grid-cols-3 gap-3">
+                                <button 
+                                    type="button"
+                                    onClick={handleAdmin}
+                                    className="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
+                                >
+                                    <FaUserShield className="text-2xl text-gray-400 group-hover:text-[#628141] mb-1 transition-colors" />
+                                    <span className="text-xs font-bold text-gray-600 dark:text-gray-300">Admin</span>
+                                </button>
 
+                                <button 
+                                    type="button"
+                                    onClick={handleChef}
+                                    className="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
+                                >
+                                    <FaUserTie className="text-2xl text-gray-400 group-hover:text-[#628141] mb-1 transition-colors" />
+                                    <span className="text-xs font-bold text-gray-600 dark:text-gray-300">Chef</span>
+                                </button>
 
-                    </form>
+                                <button 
+                                    type="button"
+                                    onClick={handleCustomer}
+                                    className="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
+                                >
+                                    <FaUser className="text-2xl text-gray-400 group-hover:text-[#628141] mb-1 transition-colors" />
+                                    <span className="text-xs font-bold text-gray-600 dark:text-gray-300">User</span>
+                                </button>
+                            </div>
 
-                    <p className="text-center mt-6 text-gray-600 dark:text-gray-300">
-                        Don't have an account?{" "}
-                        <a href="/register" className="text-primary font-medium hover:underline">
-                            Register
-                        </a>
-                    </p>
+                        </form>
 
+                        <p className="text-center mt-8 text-gray-600 dark:text-gray-400 text-sm">
+                            Don't have an account?{" "}
+                            <a href="/register" className="text-[#ff8400] font-bold hover:underline transition-colors">
+                                Register Now
+                            </a>
+                        </p>
+
+                    </div>
                 </div>
             </div>
         </>
