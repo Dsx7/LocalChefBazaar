@@ -1,75 +1,121 @@
-# LocalChefBazaar
+# LocalChefBazaar – Marketplace for Local Home-Cooked Meals
 
-**Live URL**: [https://LocalChefBazaar-dceb1.web.app/](https://LocalChefBazaar-dceb1.web.app/)
+## 📌 Project Purpose
 
-## Project Purpose & Theme
+LocalChefBazaar is a modern online platform connecting home cooks with customers seeking fresh, homemade meals. Customers can browse meals, place orders, leave reviews, and manage favorites, while chefs can upload menus and handle orders. Admins manage users, requests, and platform statistics.
 
-**LocalChefBazaar — Marketplace for Local Home-Cooked Meals**
-
-LocalChefBazaar is a modern online platform that connects passionate home cooks (chefs) with customers craving fresh, authentic homemade food.
-
-- **For Customers**: Explore daily menus from local chefs, view chef availability, place orders, make secure payments, leave reviews, and track orders in real time.
-- **For Home Cooks (Chefs)**: Easily list meals, manage orders, update menus, and earn money from their kitchen skills — no physical restaurant required.
-
-The platform promotes healthy, affordable, and delicious homemade meals while empowering local talent to turn their cooking passion into a sustainable income source.
-
-## Key Features
-
-### Customer Features
-- Browse and search meals with detailed views
-- View chef profiles and availability
-- Add meals to favorites
-- Secure payment processing
-- Order history and real-time tracking
-- Review and rating system
-
-### Chef Features
-- Create and manage meal listings
-- View and handle incoming order requests
-- Update menu and availability
-
-### Admin Features
-- Manage users (customers, chefs)
-- Approve/reject chef registration requests
-- View platform statistics and analytics (charts & reports)
-- Full oversight of orders, payments, and users
-
-### General Features
-- Role-based dashboards (Admin, Chef, Customer)
-- Responsive design (fully mobile-friendly)
-- Smooth animations and modern UI/UX
-- Real-time notifications and toast feedback
-
-## Technologies & NPM Packages Used
-
-### Frontend
-- **Vite** – Ultra-fast build tool and development server
-- **React** – Core UI library
-- **React Router** – Client-side routing
-- **Tailwind CSS** – Utility-first styling
-- **React Icons** – Icon library
-- **Recharts** – Beautiful data visualization and charts
-- **React Hot Toast** – Elegant toast notifications
-- **AOS (Animate On Scroll)** – Scroll-triggered animations
-- **Framer Motion** – Advanced animation library
-- **Animate.style** – Ready-made CSS animations
-- **Swiper.js** – Touch-enabled sliders and carousels
-- **Axios** – HTTP client for API requests
-- **React Hook Form** – Efficient form handling and validation
-- **Tanstack React Query** – Powerful data fetching, caching, and state management
-- **Firebase** – Authentication, hosting, and Firebase Admin SDK (server-side)
-
-### Backend (Server-side)
-- **Express.js** – Lightweight Node.js web framework
-- **MongoDB** – NoSQL database for storing users, meals, orders, etc.
-- **CORS** – Cross-origin resource sharing middleware
-- **dotenv** – Environment variable management
-
-## Deployment
-- **Frontend** hosted on **Firebase Hosting**
-- **Backend** deployed on **Vercel** (serverless functions)
+**Tech Stack:** MERN (MongoDB, Express.js, React, Node.js)
 
 ---
 
-Made with ❤️ for food lovers and talented home chefs!  
-Enjoy delicious homemade meals delivered right to your door.
+## 🌐 Live Demo
+
+- **Client URL:** []()
+
+---
+### 🔑 Demo Login Info
+
+- **Admin:** admin@gmail.com - Admin@1234
+- **Chef:** chef@gmail.com - Chef@1234
+- **Customer(User):** admin@gmail.com - Admin@1234
+
+## 🛠 Key Features
+
+### User Roles
+
+- **Admin:** Full access to manage users, orders, and platform settings.
+- **Chef:** Upload meals, manage food items, handle customer orders.
+- **Customer(User):** Browse meals, place orders, add reviews, favorites.
+
+### 🔑 Authentication
+
+- Email/password login and registration using Firebase Authentication
+- Role-based access control
+- JWT-based secure access for private routes
+
+### 🍽 Meals Management
+
+- Display daily meals with sorting and pagination
+- Meal details page with full information (ingredients, chef info, reviews)
+- Add meals to favorites
+- Submit reviews with rating, comment, and timestamp
+
+### 🛒 Ordering System
+
+- Private order page with auto-filled meal info
+- Confirm order with quantity and address
+- Payment integration via Stripe
+- Orders stored in MongoDB with live status updates
+
+---
+
+### Dashboards
+
+**👨‍🍳Chef:**
+
+- Create, update, delete meals
+- View order requests from users
+- Manage own meal collection
+
+**📊Admin:**
+
+- View/manage users
+- Approve/reject chef/admin requests
+- Mark users as fraud
+- Platform statistics (orders, users, payments) with Recharts
+
+**User:**
+
+- View profile
+- orders
+- reviews
+- favorites
+
+---
+
+### 📜 Extra Features
+
+- Profile page with role upgrade requests
+- Responsive design (TailwindCSS)
+- Framer Motion animations
+- Loading & error pages
+- Dynamic page titles
+- Optional: search functionality, Axios interceptors
+
+---
+
+## 📦 NPM Packages
+
+### Client
+
+- headlessui/react
+- tailwindcss/vite
+- tanstack/react-query
+- axios
+- firebase
+- framer-motion
+- lucide-react
+- react
+- react-dom
+- react-hook-form
+- react-hot-toast
+- react-icons
+- react-router
+- react-simple-typewriter
+- react-slick
+- react-spinners
+- react-toastify
+- react-typed
+- recharts
+- slick-carousel
+- sweetalert2
+- tailwindcss
+
+### Server
+
+- cors
+- dotenv
+- express
+- firebase-admin
+- mongodb
+- stripe
