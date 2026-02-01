@@ -1,4 +1,3 @@
-// components/FeaturedGhoroaPartners.jsx
 import React from 'react';
 
 const featuredPartners = [
@@ -70,7 +69,7 @@ const FeaturedGhoroaPartners = () => {
                     <span className="text-amber-500 font-bold tracking-widest uppercase text-sm mb-2 block animate-pulse">
                         Authentic Flavors
                     </span>
-                    <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 dark:text-white mb-4 berkshire-swash-regular">
+                    <h3 className="text-3xl md:text-4xl xl:text-7xl pb-10 font-semibold text-center mb-2 berkshire-swash-regular text-primary dark:text-[#628141]">
                         Favorite Homestyle Spots
                     </h3>
                     <div className="w-24 h-1 bg-amber-500 mx-auto rounded-full mb-6"></div>
