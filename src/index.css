@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sekuya&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@plugin "daisyui" {
+   themes: light --default, dark --prefersdark;
+ }
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #628141;
+  --color-secondary: #0d1b2a;
+  --color-accent: #f7f2e2;
+  /* --color-accent-content: #F79A19;  */
+  --color-accent-content: #ff8400; /* for button */
+  --color-info: #777777; 
+  --color-info-content: #442a00; 
+  --color-neutral: #f5f5f5;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: true;
+  --color-primary: #171717;
+  --color-secondary: #0d1b2a;
+  --color-accent: #424242;
+  /* --color-accent-content: #F79A19;  */
+  --color-accent-content: #171717; /* for button */
+  --color-info: #777777; 
+  --color-info-content: #442a00; 
+  --color-neutral: #f5f5f5;
+}
+
+.berkshire-swash-regular {
+  font-family: "Berkshire Swash", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.oswald {
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.stalinist-one-regular {
+  font-family: "Stalinist One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.inter {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.sekuya-regular {
+  font-family: "Sekuya", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.menu .active {
+  @apply border-2 border-[#442a00]
+}
+
+.active {
+  @apply bg-primary border-2 border-[#628141]
+}
