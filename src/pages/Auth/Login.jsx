@@ -38,7 +38,7 @@ const Login = () => {
             setSubmissionLoader(true)
 
             // login function
-            await login('adminul@gamil.com', '87654321')
+            await login('admin@gmail.com', 'Admin@1234')
             navigate("/")
             toast.success("Login seccessful")
             setSubmissionLoader(false)
@@ -55,7 +55,7 @@ const Login = () => {
             setSubmissionLoader(true)
 
             // login function
-            await login('niharika@gmail.com', '87654321')
+            await login('chef1@gmail.com', 'Chef@1234')
             navigate("/")
             toast.success("Login seccessful")
             setSubmissionLoader(false)
@@ -72,7 +72,7 @@ const Login = () => {
             setSubmissionLoader(true)
 
             // login function
-            await login('rafiul@gmail.com', '87654321')
+            await login('user@gmail.com', 'User@1234')
             navigate("/")
             toast.success("Login seccessful")
             setSubmissionLoader(false)

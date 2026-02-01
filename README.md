@@ -16,8 +16,8 @@ LocalChefBazaar is a modern online platform connecting home cooks with customers
 ### 🔑 Demo Login Info
 
 - **Admin:** admin@gmail.com - Admin@1234
-- **Chef:** chef@gmail.com - Chef@1234
-- **Customer(User):** admin@gmail.com - Admin@1234
+- **Chef:** chef1@gmail.com - Chef@1234
+- **Customer(User):** user@gmail.com - User@1234
 
 ## 🛠 Key Features
 

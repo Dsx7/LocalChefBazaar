@@ -112,27 +112,6 @@ const Navbar = () => {
                         <div className="flex items-center gap-4">
                             {user ? (
                                 <div className="dropdown dropdown-end ml-2 navbar-end space-x-2 hidden md:flex">
-
-                                    {/* Dropdown profile */}
-                                    {/* <div className="dropdown dropdown-end">
-                                        <div tabIndex={0} role="button" className="btn btn-ghost w-14 h-14 btn-circle avatar">
-                                            <div className="bg-red-400 rounded-full">
-                                                <img
-                                                    alt="profile photo"
-                                                    src={user.photoURL ? user?.photoURL : demoProfile}
-                                                />
-                                            </div>
-                                        </div>
-                                        <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm border-2 border-primary space-y-2 font-semibold">
-                                            <li className='rounded-lg hover:bg-accent'><Link to="/dashboard">My Profile</Link></li>
-                                            <li className='rounded-lg hover:bg-accent'><Link to="/dashboard">Dashboard</Link></li>
-                                            <Switch handleTheme={handleTheme} theme={theme} />
-                                            <button className="btn shadow-none text-lg bg-accent-content border-accent-content" onClick={logOut} >
-                                                Logout
-                                            </button>
-                                        </ul>
-                                    </div> */}
-
                                     <div onClick={() => setIsOpen(false)} className="drop-menu dropdown dropdown-end">
                                         <div tabIndex={0} role="button" className="btn btn-ghost w-14 h-14 btn-circle avatar">
                                             <div className="bg-red-400 rounded-full">
@@ -142,7 +121,6 @@ const Navbar = () => {
                                                 />
                                             </div>
                                         </div>
-                                        {/* <img tabIndex={0} role="button" onClick={profileClicker} title={user?.displayName} className='btn btn-ghost w-14 h-14 btn-circle avatar' src={user.photoURL ? user?.photoURL : demoProfile} alt="Profile Picture" /> */}
                                         <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm space-y-2 ">
                                             <div className='p-2 text-secondary'>
                                                 <p className="font-semibold text-base dark:text-white">{user.displayName}</p>
@@ -157,7 +135,10 @@ const Navbar = () => {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="hidden lg:block navbar-end">
+                                /* Added flex, items-center and gap to align Switch and Login button */
+                                <div className="hidden lg:flex items-center gap-3 navbar-end">
+                                    {/* Added Day/Night Toggle here */}
+                                    <Switch />
                                     <Link className="btn shadow-none text-lg bg-[#ff8400] border-accent-content" to="/login" >Login</Link>
                                 </div>
                             )}
@@ -166,7 +147,7 @@ const Navbar = () => {
                 </div>
             </header >
 
-            {/* Sidebar — Dashboard-এর মতোই */}
+            {/* Sidebar */}
             < div
                 className={`
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
