@@ -1,41 +1,54 @@
+// components/Cards/ReviewCard.jsx
 import React from 'react';
-import { FaUserCircle } from 'react-icons/fa';
-import { motion } from "framer-motion";
+import { FaQuoteRight, FaStar } from 'react-icons/fa';
 
 const ReviewCard = ({ review }) => {
     const { comment, reviewerName, reviewerImage, createdAt } = review;
-    
+
     return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: -20 }}
-            transition={{ duration: 0.45, ease: "easeOut" }}
-            className="backdrop-blur-xl bg-white/60 border border-white/20 rounded-3xl 
-                       p-6 w-48 md:w-72 lg:w-80 h-fit text-center shadow-lg"
-        >
-            {/* Quote Icon */}
-            {/* <div className="text-teal-300 text-4xl mb-4">
-                <FaUserCircle />
-            </div> */}
+        <div className="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-sm h-full w-[300px] md:w-[380px] relative overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col justify-between">
+            
+            {/* Background Decorative Icon */}
+            <div className="absolute top-4 right-6 text-[#628141] opacity-5 text-6xl font-serif leading-none select-none pointer-events-none">
+                <FaQuoteRight />
+            </div>
 
-            {/* Review Text */}
-            <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-2">
-                {comment}
-            </p>
+            <div>
+                {/* Stars (Visual only) */}
+                <div className="flex gap-1 text-amber-400 mb-4 text-sm">
+                    {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} />
+                    ))}
+                </div>
 
-            {/* Divider */}
-            <div className="border-t border-dashed border-primary my-4"></div>
+                {/* Comment */}
+                <p className="text-gray-600 dark:text-gray-300 text-base md:text-lg italic leading-relaxed font-light mb-6 line-clamp-4">
+                    "{comment}"
+                </p>
+            </div>
 
-            {/* Profile Section */}
-            <div className="flex items-center gap-3 justify-center">
-                <img className="w-10 h-10 rounded-full bg-teal-900" src={reviewerImage} alt={reviewerName} />
+            {/* User Info */}
+            <div className="flex items-center gap-4 mt-auto pt-6 border-t border-gray-100 dark:border-gray-700">
+                <div className="relative">
+                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#628141]/20 p-0.5">
+                        <img 
+                            className="w-full h-full rounded-full object-cover" 
+                            src={reviewerImage} 
+                            alt={reviewerName} 
+                        />
+                    </div>
+                </div>
+                
                 <div>
-                    <h3 className="font-semibold text-gray-800">{reviewerName}</h3>
-                    <p className="text-sm text-gray-500">{new Date(createdAt).toDateString()}</p>
+                    <h3 className="font-bold text-[#628141] text-base leading-tight">
+                        {reviewerName}
+                    </h3>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider font-medium mt-0.5">
+                        {new Date(createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </p>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 };
 

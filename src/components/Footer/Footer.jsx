@@ -9,7 +9,7 @@ const Footer = () => {
 
                 <div>
                     <h2 className="text-2xl font-bold text-white mb-4">
-                        <Logo logoSize="w-[75px]" textColor="text-primary" mainTextSize="text-2xl" subTextSize="text-lg" />
+                        <Logo logoSize="w-[75px]" textColor="text-[#628141]" mainTextSize="text-2xl" subTextSize="text-lg" />
                     </h2>
                     <p className="text-sm mb-4 leading-relaxed">
                         Fresh, homemade meals prepared by trusted chefs near you.
@@ -18,11 +18,11 @@ const Footer = () => {
 
                     <div className="space-y-2 text-sm">
                         <p className="flex items-center gap-2">
-                            <FaPhoneAlt className="text-primary" />
+                            <FaPhoneAlt className="text-[#628141]" />
                             +880 1700-000000
                         </p>
                         <p className="flex items-center gap-2">
-                            <FaEnvelope className="text-primary" />
+                            <FaEnvelope className="text-[#628141]" />
                             support@localchefbazaar.com
                         </p>
                     </div>
