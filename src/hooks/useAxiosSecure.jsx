@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 
 const axiosSecure = axios.create({
-    baseURL: 'https://local-chef-bazaar-server-beta.vercel.app/',
+    baseURL: 'https://local-chef-bazaar-server-beta.vercel.app',
 });
 
 const useAxiosSecure = () => {
