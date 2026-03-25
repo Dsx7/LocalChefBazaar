@@ -19,6 +19,7 @@ import CreateMeal from "../pages/Dashboard/Chef/CreateMeal";
 import MyMeals from "../pages/Dashboard/Chef/MyMeals";
 import OrderPage from "../pages/Order/OrderPage";
 import OrderRequests from "../pages/Dashboard/Chef/OrderRequests";
+import DeliverySlots from "../pages/Dashboard/Chef/DeliverySlots";
 import FindProfile from "../pages/Dashboard/FindProfile";
 import AuthProvider from "../context/AuthProvider";
 import PrivateRoute from "./PrivateRoute";
@@ -119,6 +120,12 @@ export const router = createBrowserRouter([
         path: "order-requests",
         element: <ChefRoute>
           <OrderRequests />
+        </ChefRoute>
+      },
+      {
+        path: "delivery-slots",
+        element: <ChefRoute>
+          <DeliverySlots />
         </ChefRoute>
       },
       // User Panel

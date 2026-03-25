@@ -106,6 +106,12 @@ const MyOrders = () => {
                                     <strong>Delivery Time:</strong> {order?.orderTime}
                                 </span>
                             </p>
+                            {order?.deliverySlot && (
+                                <p>
+                                    <strong>Delivery Slot:</strong>{" "}
+                                    {order.deliverySlot.date} {order.deliverySlot.startTime}-{order.deliverySlot.endTime}
+                                </p>
+                            )}
                             <p>
                                 <strong>Chef Name:</strong> {order?.chefName}
                             </p>

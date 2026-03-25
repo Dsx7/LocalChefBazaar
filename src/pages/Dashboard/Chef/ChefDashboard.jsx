@@ -21,7 +21,8 @@ import {
     FaHeart,
     FaPlus,
     FaUtensils,
-    FaHamburger
+    FaHamburger,
+    FaCalendarAlt
 } from 'react-icons/fa';
 import { FiHeart, FiShoppingBag, FiStar } from 'react-icons/fi';
 import useAuth from '../../../hooks/useAuth';
@@ -38,6 +39,7 @@ function UserDashboard() {
         { icon: FaUser, name: "My Profile", active: true, route: "/dashboard" },
         { icon: FaUtensils, name: "Create Meal", route: "create-meal" },
         { icon: FaHamburger, name: "My Meals", route: "my-meals" },
+        { icon: FaCalendarAlt, name: "Delivery Slots", route: "delivery-slots" },
         { icon: FaClipboardList, name: "Order Requests", route: "order-requests" },
         { icon: FaCog, name: "Settings", route: "settings" },
     ];

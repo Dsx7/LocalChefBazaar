@@ -140,6 +140,15 @@ const OrderRequests = () => {
                     <span className="font-semibold">{order.userAddress}</span>
                   </p>
 
+                  {order.deliverySlot && (
+                    <p className="text-sm text-gray-700 dark:text-white">
+                      Delivery Slot :{" "}
+                      <span className="font-semibold">
+                        {order.deliverySlot.date} {order.deliverySlot.startTime}-{order.deliverySlot.endTime}
+                      </span>
+                    </p>
+                  )}
+
                   <p className="text-xs text-gray-500 dark:text-white">
                     Ordered At : {order.orderTime}
                   </p>

@@ -4,7 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
 const OrderPage = ({ onClose, meal }) => {
@@ -25,6 +25,17 @@ const OrderPage = ({ onClose, meal }) => {
             orderTime: new Date().toLocaleString(),
         },
     })
+
+    const { data: slots = [], isLoading: slotsLoading } = useQuery({
+        queryKey: ["availableSlots", meal?.chefId],
+        enabled: !!meal?.chefId,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/schedules/available?chefId=${meal?.chefId}`);
+            return res.data;
+        }
+    });
+
+    const noSlots = !slotsLoading && slots.length === 0;
 
     const orderMutation = useMutation({
         mutationFn: async (orderData) => {
@@ -131,6 +142,42 @@ const OrderPage = ({ onClose, meal }) => {
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1">
+                                Delivery Slot
+                            </label>
+                            {slotsLoading ? (
+                                <div className="w-full border rounded-lg px-4 py-2 text-gray-500">
+                                    Loading available slots...
+                                </div>
+                            ) : (
+                                <select
+                                    className="w-full border rounded-lg px-4 py-2 focus:border-green-600 focus:ring-2 focus:ring-green-200 outline-none bg-white"
+                                    {...register("deliverySlotId", {
+                                        required: "Delivery slot is required",
+                                    })}
+                                    defaultValue=""
+                                >
+                                    <option value="" disabled>
+                                        Select a delivery slot
+                                    </option>
+                                    {slots.map((slot) => (
+                                        <option key={slot._id} value={slot._id}>
+                                            {slot.date} • {slot.startTime}-{slot.endTime} (Remaining {slot.remaining})
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                            {noSlots && (
+                                <p className="text-sm text-red-500 mt-1">
+                                    No delivery slots available for this chef right now.
+                                </p>
+                            )}
+                            {errors.deliverySlotId && (
+                                <p className="text-red-500 text-sm mt-1">{errors.deliverySlotId.message}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">
                                 Chef ID
                             </label>
                             <input
@@ -197,8 +244,8 @@ const OrderPage = ({ onClose, meal }) => {
                     <button
                         type="submit"
                         onClick={handleSubmit(onSubmit)}
-                        className="w-full py-3 rounded-lg text-white font-semibold text-lg hover:opacity-90 cursor-pointer"
-                        style={{ backgroundColor: "#ff8400" }}
+                        disabled={noSlots}
+                        className={`w-full py-3 rounded-lg text-white font-semibold text-lg hover:opacity-90 ${noSlots ? "bg-gray-400 cursor-not-allowed" : "bg-[#ff8400] cursor-pointer"}`}
                     >
                         Confirm Order
                     </button>
