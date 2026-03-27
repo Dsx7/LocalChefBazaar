@@ -5,6 +5,24 @@ import toast from "react-hot-toast";
 
 const MealsUpdateModal = ({ meal, onClose, refetch }) => {
   const axiosSecure = useAxiosSecure();
+  const dietaryOptions = [
+    { label: "Halal", value: "halal" },
+    { label: "Vegan", value: "vegan" },
+    { label: "Vegetarian", value: "vegetarian" },
+    { label: "Gluten-Free", value: "gluten-free" },
+    { label: "Keto", value: "keto" },
+    { label: "Dairy-Free", value: "dairy-free" },
+  ];
+  const allergenOptions = [
+    { label: "Peanuts", value: "peanuts" },
+    { label: "Tree Nuts", value: "tree-nuts" },
+    { label: "Dairy", value: "dairy" },
+    { label: "Eggs", value: "eggs" },
+    { label: "Gluten", value: "gluten" },
+    { label: "Soy", value: "soy" },
+    { label: "Shellfish", value: "shellfish" },
+    { label: "Sesame", value: "sesame" },
+  ];
 
   const {
     register,
@@ -18,10 +36,19 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
       estimatedDeliveryTime: meal.estimatedDeliveryTime,
       ingredients: meal.ingredients.join(", "),
       subscriptionEligible: meal.subscriptionEligible || false,
+      dietaryTags: meal.dietaryTags || [],
+      allergens: meal.allergens || [],
+      calories: meal?.nutrition?.calories || "",
+      protein: meal?.nutrition?.protein || "",
+      carbs: meal?.nutrition?.carbs || "",
+      fat: meal?.nutrition?.fat || "",
     },
   });
 
   const onSubmit = async (data) => {
+    const normalizeArray = (value) =>
+      Array.isArray(value) ? value : value ? [value] : [];
+
     const updatedMeal = {
       foodName: data.foodName,
       price: data.price,
@@ -29,6 +56,14 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
       estimatedDeliveryTime: data.estimatedDeliveryTime,
       ingredients: data.ingredients.split(",").map(i => i.trim()),
       subscriptionEligible: data.subscriptionEligible === true || data.subscriptionEligible === "true",
+      dietaryTags: normalizeArray(data.dietaryTags),
+      allergens: normalizeArray(data.allergens),
+      nutrition: {
+        calories: Number(data.calories || 0),
+        protein: Number(data.protein || 0),
+        carbs: Number(data.carbs || 0),
+        fat: Number(data.fat || 0),
+      },
     };
 
     try {
@@ -110,6 +145,80 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
               {...register("ingredients")}
               className="w-full mt-1 px-4 py-3 border rounded-xl"
             />
+          </div>
+
+          <div>
+            <label className="font-semibold text-sm">Dietary Tags</label>
+            <div className="mt-2 flex flex-wrap gap-3">
+              {dietaryOptions.map((option) => (
+                <label
+                  key={option.value}
+                  className="flex items-center gap-2 text-sm text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    value={option.value}
+                    {...register("dietaryTags")}
+                    className="w-4 h-4 accent-primary"
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="font-semibold text-sm">Allergen Warnings</label>
+            <div className="mt-2 flex flex-wrap gap-3">
+              {allergenOptions.map((option) => (
+                <label
+                  key={option.value}
+                  className="flex items-center gap-2 text-sm text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    value={option.value}
+                    {...register("allergens")}
+                    className="w-4 h-4 accent-primary"
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="font-semibold text-sm">Nutrition (per serving)</label>
+            <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-3">
+              <input
+                type="number"
+                min="0"
+                placeholder="Calories"
+                {...register("calories")}
+                className="w-full px-4 py-3 border rounded-xl"
+              />
+              <input
+                type="number"
+                min="0"
+                placeholder="Protein (g)"
+                {...register("protein")}
+                className="w-full px-4 py-3 border rounded-xl"
+              />
+              <input
+                type="number"
+                min="0"
+                placeholder="Carbs (g)"
+                {...register("carbs")}
+                className="w-full px-4 py-3 border rounded-xl"
+              />
+              <input
+                type="number"
+                min="0"
+                placeholder="Fat (g)"
+                {...register("fat")}
+                className="w-full px-4 py-3 border rounded-xl"
+              />
+            </div>
           </div>
 
           <div className="flex items-center gap-3">

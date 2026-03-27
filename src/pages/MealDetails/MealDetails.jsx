@@ -209,6 +209,74 @@ export default function MealDetails() {
                             )}
                         </div>
 
+                        <div className="mt-6">
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3">
+                                Dietary Tags
+                            </h3>
+                            {meal?.dietaryTags?.length > 0 ? (
+                                <div className="flex flex-wrap gap-2">
+                                    {meal.dietaryTags.map((tag) => (
+                                        <span
+                                            key={tag}
+                                            className="px-3 py-1 bg-green-50 dark:bg-green-900/20 text-[#628141] dark:text-green-400 text-xs font-semibold rounded-full border border-green-100 dark:border-green-800"
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-gray-400 italic text-sm">No dietary tags listed.</p>
+                            )}
+                        </div>
+
+                        <div className="mt-6">
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3">
+                                Allergen Warnings
+                            </h3>
+                            {meal?.allergens?.length > 0 ? (
+                                <div className="flex flex-wrap gap-2">
+                                    {meal.allergens.map((item) => (
+                                        <span
+                                            key={item}
+                                            className="px-3 py-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-300 text-xs font-semibold rounded-full border border-red-100 dark:border-red-800"
+                                        >
+                                            {item}
+                                        </span>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-gray-400 italic text-sm">No allergens declared.</p>
+                            )}
+                        </div>
+
+                        <div className="mt-6">
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3">
+                                Nutrition (per serving)
+                            </h3>
+                            {meal?.nutrition ? (
+                                <div className="grid grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200">
+                                    <div className="bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">Calories</p>
+                                        <p className="font-semibold">{meal.nutrition.calories || 0} kcal</p>
+                                    </div>
+                                    <div className="bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">Protein</p>
+                                        <p className="font-semibold">{meal.nutrition.protein || 0} g</p>
+                                    </div>
+                                    <div className="bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">Carbs</p>
+                                        <p className="font-semibold">{meal.nutrition.carbs || 0} g</p>
+                                    </div>
+                                    <div className="bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">Fat</p>
+                                        <p className="font-semibold">{meal.nutrition.fat || 0} g</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className="text-gray-400 italic text-sm">Nutrition info not available.</p>
+                            )}
+                        </div>
+
                         {/* Order Button */}
                         <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
                             <motion.button

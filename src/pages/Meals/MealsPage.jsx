@@ -16,6 +16,36 @@ const MealsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [deliveryAreaFilter, setDeliveryAreaFilter] = useState('');
+  const [dietaryFilters, setDietaryFilters] = useState([]);
+  const [allergenFilters, setAllergenFilters] = useState([]);
+
+  const dietaryOptions = [
+    { label: "Halal", value: "halal" },
+    { label: "Vegan", value: "vegan" },
+    { label: "Vegetarian", value: "vegetarian" },
+    { label: "Gluten-Free", value: "gluten-free" },
+    { label: "Keto", value: "keto" },
+    { label: "Dairy-Free", value: "dairy-free" },
+  ];
+
+  const allergenOptions = [
+    { label: "Peanuts", value: "peanuts" },
+    { label: "Tree Nuts", value: "tree-nuts" },
+    { label: "Dairy", value: "dairy" },
+    { label: "Eggs", value: "eggs" },
+    { label: "Gluten", value: "gluten" },
+    { label: "Soy", value: "soy" },
+    { label: "Shellfish", value: "shellfish" },
+    { label: "Sesame", value: "sesame" },
+  ];
+
+  const toggleFilter = (value, list, setList) => {
+    if (list.includes(value)) {
+      setList(list.filter(item => item !== value));
+    } else {
+      setList([...list, value]);
+    }
+  };
 
   // Debounced search
   const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
@@ -34,7 +64,15 @@ const MealsPage = () => {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ['meals', page, debouncedSearch, sortBy, deliveryAreaFilter],
+    queryKey: [
+      'meals',
+      page,
+      debouncedSearch,
+      sortBy,
+      deliveryAreaFilter,
+      dietaryFilters.join(","),
+      allergenFilters.join(","),
+    ],
     queryFn: async () => {
       const params = {
         page,
@@ -42,6 +80,8 @@ const MealsPage = () => {
         ...(debouncedSearch && { search: debouncedSearch }),
         ...(sortBy && { sort: sortBy }),
         ...(deliveryAreaFilter && { deliveryArea: deliveryAreaFilter }),
+        ...(dietaryFilters.length && { dietary: dietaryFilters.join(",") }),
+        ...(allergenFilters.length && { excludeAllergens: allergenFilters.join(",") }),
       };
 
       const res = await axiosSecure.get('/meals', { params });
@@ -63,13 +103,15 @@ const MealsPage = () => {
     setSearchTerm('');
     setSortBy('');
     setDeliveryAreaFilter('');
+    setDietaryFilters([]);
+    setAllergenFilters([]);
     setPage(1);
   };
 
   // Auto refetch on filter/sort change
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, sortBy, deliveryAreaFilter]);
+  }, [debouncedSearch, sortBy, deliveryAreaFilter, dietaryFilters, allergenFilters]);
 
   return (
     <section className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
@@ -163,7 +205,7 @@ const MealsPage = () => {
               </div>
 
               {/* Clear Button */}
-              {(searchTerm || sortBy || deliveryAreaFilter) && (
+              {(searchTerm || sortBy || deliveryAreaFilter || dietaryFilters.length || allergenFilters.length) && (
                 <button
                   onClick={resetFilters}
                   className="px-6 py-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-semibold rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors shadow-sm whitespace-nowrap"
@@ -171,6 +213,64 @@ const MealsPage = () => {
                   Clear
                 </button>
               )}
+            </div>
+
+            <div className="mt-6 grid md:grid-cols-2 gap-6">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+                  Dietary Tags
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {dietaryOptions.map((option) => {
+                    const active = dietaryFilters.includes(option.value);
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() =>
+                          toggleFilter(option.value, dietaryFilters, setDietaryFilters)
+                        }
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                          active
+                            ? "bg-green-100 text-green-700 border-green-300"
+                            : "bg-white text-gray-600 border-gray-200 hover:border-green-300"
+                        }`}
+                        aria-pressed={active}
+                      >
+                        {option.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+                  Avoid Allergens
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {allergenOptions.map((option) => {
+                    const active = allergenFilters.includes(option.value);
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() =>
+                          toggleFilter(option.value, allergenFilters, setAllergenFilters)
+                        }
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                          active
+                            ? "bg-red-100 text-red-700 border-red-300"
+                            : "bg-white text-gray-600 border-gray-200 hover:border-red-300"
+                        }`}
+                        aria-pressed={active}
+                      >
+                        {option.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
 

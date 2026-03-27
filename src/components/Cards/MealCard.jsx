@@ -5,7 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const MealCard = ({ meal }) => {
-    const { _id, chefId, foodName, foodImage, chefName, price, rating, deliveryArea } = meal;
+    const { _id, chefId, foodName, foodImage, chefName, price, rating, deliveryArea, nutrition } = meal;
 
     return (
         <div
@@ -50,11 +50,23 @@ const MealCard = ({ meal }) => {
                         <span>(Customer Rating)</span>
                     </div>
 
-                    {meal?.subscriptionEligible && (
-                        <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                            Subscription Eligible
-                        </div>
-                    )}
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                        {nutrition && (
+                            <>
+                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+                                    {nutrition.calories || 0} kcal
+                                </span>
+                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                    {nutrition.protein || 0}g protein
+                                </span>
+                            </>
+                        )}
+                        {meal?.subscriptionEligible && (
+                            <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                Subscription Eligible
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Details Grid */}

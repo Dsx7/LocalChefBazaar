@@ -12,6 +12,24 @@ const CreateMeal = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const { user, loading } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const dietaryOptions = [
+        { label: "Halal", value: "halal" },
+        { label: "Vegan", value: "vegan" },
+        { label: "Vegetarian", value: "vegetarian" },
+        { label: "Gluten-Free", value: "gluten-free" },
+        { label: "Keto", value: "keto" },
+        { label: "Dairy-Free", value: "dairy-free" },
+    ];
+    const allergenOptions = [
+        { label: "Peanuts", value: "peanuts" },
+        { label: "Tree Nuts", value: "tree-nuts" },
+        { label: "Dairy", value: "dairy" },
+        { label: "Eggs", value: "eggs" },
+        { label: "Gluten", value: "gluten" },
+        { label: "Soy", value: "soy" },
+        { label: "Shellfish", value: "shellfish" },
+        { label: "Sesame", value: "sesame" },
+    ];
     const {
         register,
         handleSubmit,
@@ -68,6 +86,8 @@ const CreateMeal = () => {
             setError("foodImg", { message: "Food image is required" });
             return;
         }
+        const normalizeArray = (value) =>
+            Array.isArray(value) ? value : value ? [value] : [];
         const ingredients = foodMetarials.split(",").map(item => item.trim());
         const foodImage = await imgUploader(foodImg)
         const mealsData = {
@@ -81,7 +101,16 @@ const CreateMeal = () => {
             chefExperience,
             chefId,
             userEmail,
-            deliveryArea
+            deliveryArea,
+            dietaryTags: normalizeArray(data.dietaryTags),
+            allergens: normalizeArray(data.allergens),
+            nutrition: {
+                calories: Number(data.calories || 0),
+                protein: Number(data.protein || 0),
+                carbs: Number(data.carbs || 0),
+                fat: Number(data.fat || 0),
+            },
+            subscriptionEligible: data.subscriptionEligible === "true",
         }
         mutation.mutate(mealsData)
     }
@@ -279,6 +308,86 @@ const CreateMeal = () => {
                                 {errors.chefName.message}
                             </p>
                         )}
+                    </div>
+
+                    <div className="col-span-1 md:col-span-2">
+                        <label className="block text-gray-700 font-semibold mb-2 dark:text-primary">
+                            Dietary Tags
+                        </label>
+                        <div className="flex flex-wrap gap-3">
+                            {dietaryOptions.map((option) => (
+                                <label
+                                    key={option.value}
+                                    className="flex items-center gap-2 text-sm text-gray-700 dark:text-primary"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        value={option.value}
+                                        {...register("dietaryTags")}
+                                        className="w-4 h-4 accent-primary"
+                                    />
+                                    {option.label}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="col-span-1 md:col-span-2">
+                        <label className="block text-gray-700 font-semibold mb-2 dark:text-primary">
+                            Allergen Warnings
+                        </label>
+                        <div className="flex flex-wrap gap-3">
+                            {allergenOptions.map((option) => (
+                                <label
+                                    key={option.value}
+                                    className="flex items-center gap-2 text-sm text-gray-700 dark:text-primary"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        value={option.value}
+                                        {...register("allergens")}
+                                        className="w-4 h-4 accent-primary"
+                                    />
+                                    {option.label}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="col-span-1 md:col-span-2">
+                        <label className="block text-gray-700 font-semibold mb-2 dark:text-primary">
+                            Nutrition (per serving)
+                        </label>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <input
+                                type="number"
+                                min="0"
+                                placeholder="Calories"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                {...register("calories")}
+                            />
+                            <input
+                                type="number"
+                                min="0"
+                                placeholder="Protein (g)"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                {...register("protein")}
+                            />
+                            <input
+                                type="number"
+                                min="0"
+                                placeholder="Carbs (g)"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                {...register("carbs")}
+                            />
+                            <input
+                                type="number"
+                                min="0"
+                                placeholder="Fat (g)"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                {...register("fat")}
+                            />
+                        </div>
                     </div>
 
                     <div className="col-span-1 md:col-span-2 flex items-center gap-3">
