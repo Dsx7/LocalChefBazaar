@@ -123,6 +123,11 @@ export default function MealDetails() {
                             <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-[#628141] text-xs font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
                                 <FaLeaf /> Fresh
                             </span>
+                            {meal?.subscriptionEligible && (
+                                <span className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider rounded-full">
+                                    Subscription Eligible
+                                </span>
+                            )}
                         </div>
                         <h1 className="text-3xl md:text-5xl font-bold text-[#628141] berkshire-swash-regular leading-tight">
                             {meal?.foodName}

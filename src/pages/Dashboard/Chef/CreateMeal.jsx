@@ -281,6 +281,18 @@ const CreateMeal = () => {
                         )}
                     </div>
 
+                    <div className="col-span-1 md:col-span-2 flex items-center gap-3">
+                        <input
+                            type="checkbox"
+                            value="true"
+                            {...register("subscriptionEligible")}
+                            className="w-4 h-4 accent-primary"
+                        />
+                        <label className="text-gray-700 font-semibold dark:text-primary">
+                            Subscription Eligible (allow this meal in subscription plans)
+                        </label>
+                    </div>
+
                     <div className="col-span-1 md:col-span-2">
                         <label className="block text-gray-700 font-semibold mb-1 dark:text-primary">
                             Ingredients

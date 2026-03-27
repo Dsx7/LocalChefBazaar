@@ -15,16 +15,20 @@ import MyOrders from "../pages/Dashboard/User/MyOrders";
 import MyReviews from "../pages/Dashboard/User/MyReviews";
 import Favorites from "../pages/Dashboard/User/Favorites";
 import FavoriteMeal from "../pages/Dashboard/User/FavoriteMeal";
+import MySubscriptions from "../pages/Dashboard/User/MySubscriptions";
 import CreateMeal from "../pages/Dashboard/Chef/CreateMeal";
 import MyMeals from "../pages/Dashboard/Chef/MyMeals";
 import OrderPage from "../pages/Order/OrderPage";
 import OrderRequests from "../pages/Dashboard/Chef/OrderRequests";
 import DeliverySlots from "../pages/Dashboard/Chef/DeliverySlots";
+import SubscriptionPlans from "../pages/Dashboard/Chef/SubscriptionPlans";
 import FindProfile from "../pages/Dashboard/FindProfile";
 import AuthProvider from "../context/AuthProvider";
 import PrivateRoute from "./PrivateRoute";
 import PaymentSuc from "../payment/PaymentSuc";
 import PaymentCan from "../payment/PaymentCan";
+import SubscriptionSuccess from "../subscription/SubscriptionSuccess";
+import SubscriptionCancel from "../subscription/SubscriptionCancel";
 import AdminRoute from "./AdminRoute";
 import ChefRoute from "./ChefRoute";
 import UserRoute from "./UserRoute";
@@ -128,6 +132,12 @@ export const router = createBrowserRouter([
           <DeliverySlots />
         </ChefRoute>
       },
+      {
+        path: "subscription-plans",
+        element: <ChefRoute>
+          <SubscriptionPlans />
+        </ChefRoute>
+      },
       // User Panel
       {
         path: "my-orders",
@@ -147,6 +157,12 @@ export const router = createBrowserRouter([
           <FavoriteMeal />
         </UserRoute>
       },
+      {
+        path: "my-subscriptions",
+        element: <UserRoute>
+          <MySubscriptions />
+        </UserRoute>
+      },
       //Payment related route
       {
         path: "payment-success",
@@ -155,6 +171,14 @@ export const router = createBrowserRouter([
       {
         path: "payment-cancel",
         element: <PaymentCan />,
+      },
+      {
+        path: "subscription-success",
+        element: <SubscriptionSuccess />,
+      },
+      {
+        path: "subscription-cancel",
+        element: <SubscriptionCancel />,
       }
     ]
   }

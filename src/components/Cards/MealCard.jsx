@@ -49,6 +49,12 @@ const MealCard = ({ meal }) => {
                         <span className="text-gray-800 dark:text-white font-bold">{rating}</span>
                         <span>(Customer Rating)</span>
                     </div>
+
+                    {meal?.subscriptionEligible && (
+                        <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                            Subscription Eligible
+                        </div>
+                    )}
                 </div>
 
                 {/* Details Grid */}

@@ -18,7 +18,8 @@ import {
     FaRegUser,
     FaUser,
     FaStar,
-    FaHeart
+    FaHeart,
+    FaRegCalendarAlt
 } from 'react-icons/fa';
 import { FiHeart, FiShoppingBag, FiStar } from 'react-icons/fi';
 import useAuth from '../../../hooks/useAuth';
@@ -35,7 +36,8 @@ function UserDashboard() {
         { icon: FaUser, name: "My Profile", active: true, route: "/dashboard" },
         { icon: FaShoppingCart, name: "My Orders", route: "my-orders" },
         { icon: FaStar, name: "My Reviews", route: "my-reviews" },
-        { icon: FaHeart, name: "Favorite Meal", route: "favorite-meals" }
+        { icon: FaHeart, name: "Favorite Meal", route: "favorite-meals" },
+        { icon: FaRegCalendarAlt, name: "My Subscriptions", route: "my-subscriptions" }
     ];
 
     return (

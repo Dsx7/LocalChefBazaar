@@ -17,6 +17,7 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
       rating: meal.rating,
       estimatedDeliveryTime: meal.estimatedDeliveryTime,
       ingredients: meal.ingredients.join(", "),
+      subscriptionEligible: meal.subscriptionEligible || false,
     },
   });
 
@@ -27,6 +28,7 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
       rating: data.rating,
       estimatedDeliveryTime: data.estimatedDeliveryTime,
       ingredients: data.ingredients.split(",").map(i => i.trim()),
+      subscriptionEligible: data.subscriptionEligible === true || data.subscriptionEligible === "true",
     };
 
     try {
@@ -108,6 +110,18 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
               {...register("ingredients")}
               className="w-full mt-1 px-4 py-3 border rounded-xl"
             />
+          </div>
+
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              value="true"
+              {...register("subscriptionEligible")}
+              className="w-4 h-4 accent-primary"
+            />
+            <label className="font-semibold text-sm">
+              Subscription Eligible
+            </label>
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
