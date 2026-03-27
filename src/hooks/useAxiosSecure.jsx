@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 
 const axiosSecure = axios.create({
-    baseURL: 'https://local-chef-bazaar-server-beta.vercel.app',
+    baseURL: 'https://local-chef-bazaar-server-beta.vercel.app/',
 });
 
 const useAxiosSecure = () => {
@@ -11,9 +11,12 @@ const useAxiosSecure = () => {
 
     useEffect(() => {
         const requestInterceptor = axiosSecure.interceptors.request.use(
-            (config) => {
-                if (user?.accessToken) {
-                    config.headers.Authorization = `Bearer ${user.accessToken}`;
+            async (config) => {
+                if (user) {
+                    const token = await user.getIdToken();
+                    if (token) {
+                        config.headers.Authorization = `Bearer ${token}`;
+                    }
                 }
                 return config;
             },

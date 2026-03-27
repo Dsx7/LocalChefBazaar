@@ -4,12 +4,13 @@ import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
 const OrderPage = ({ onClose, meal }) => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure();
+    const queryClient = useQueryClient();
     const {
         register,
         handleSubmit,
@@ -44,11 +45,15 @@ const OrderPage = ({ onClose, meal }) => {
         },
         onSuccess: () => {
             toast.success("Order placed successfully 🍽️");
+            queryClient.invalidateQueries(["availableSlots", meal?.chefId]);
             reset();
             onClose();
         },
-        onError: () => {
-            toast.error("Failed to place order ❌. Please Log in");
+        onError: (error) => {
+            const message =
+                error?.response?.data?.message ||
+                "Failed to place order ❌. Please log in again.";
+            toast.error(message);
         },
     });
 

@@ -89,9 +89,7 @@ const Navbar = () => {
                         {/* Left: Logo + Hamburger (Mobile) */}
                         <div className="w-full lg:w-fit flex items-center gap-4 justify-between">
 
-                            <Link to="/">
-                                <Logo logoSize="w-[50px] lg:w-[70px]" mainTextSize="text-xl lg:text-2xl" subTextSize="text-sm lg:text-base" />
-                            </Link>
+                            <Logo logoSize="w-[50px] lg:w-[70px]" mainTextSize="text-xl lg:text-2xl" subTextSize="text-sm lg:text-base" />
 
                             <button
                                 onClick={() => setSidebarOpen(true)}
