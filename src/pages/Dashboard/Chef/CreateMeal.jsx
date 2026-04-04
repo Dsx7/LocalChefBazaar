@@ -81,7 +81,7 @@ const CreateMeal = () => {
     });
 
     const handleMeal = async (data) => {
-        const { foodName, chefName, price, rating, foodMetarials, estimatedDeliveryTime, chefExperience, chefId, userEmail, foodImg, deliveryArea, additionalImages } = data;
+        const { foodName, chefName, price, rating, foodMetarials, estimatedDeliveryTime, chefExperience, chefId, userEmail, foodImg, deliveryArea, additionalImages, description } = data;
         if (!foodImg) {
             setError("foodImg", { message: "Food image is required" });
             return;
@@ -99,6 +99,7 @@ const CreateMeal = () => {
             foodImage,
             price,
             rating,
+            description: description?.trim(),
             ingredients,
             estimatedDeliveryTime,
             chefExperience,
@@ -433,6 +434,26 @@ const CreateMeal = () => {
                         {errors.foodMetarials && (
                             <p className="text-red-500 text-sm mt-1">
                                 {errors.foodMetarials.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="col-span-1 md:col-span-2">
+                        <label className="block text-gray-700 font-semibold mb-1 dark:text-primary">
+                            Short Description
+                        </label>
+                        <textarea
+                            rows={3}
+                            placeholder="Briefly describe this meal (1-2 sentences)"
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                            {...register("description", {
+                                required: "Short description is required",
+                                maxLength: { value: 200, message: "Max 200 characters" },
+                            })}
+                        ></textarea>
+                        {errors.description && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.description.message}
                             </p>
                         )}
                     </div>

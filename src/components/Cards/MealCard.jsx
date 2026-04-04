@@ -5,7 +5,12 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const MealCard = ({ meal }) => {
-    const { _id, chefId, foodName, foodImage, chefName, price, rating, deliveryArea, nutrition } = meal;
+    const { _id, chefId, foodName, foodImage, chefName, price, rating, deliveryArea, nutrition, description, ingredients } = meal;
+    const shortDescription =
+        description?.trim() ||
+        (Array.isArray(ingredients) && ingredients.length > 0
+            ? `Ingredients: ${ingredients.slice(0, 4).join(", ")}${ingredients.length > 4 ? "…" : ""}`
+            : "");
 
     return (
         <div
@@ -42,6 +47,12 @@ const MealCard = ({ meal }) => {
                     <h2 className="text-2xl font-bold text-[#628141] mb-2 leading-tight line-clamp-1 berkshire-swash-regular">
                         {foodName}
                     </h2>
+
+                    {shortDescription && (
+                        <p className="text-sm text-gray-500 dark:text-gray-300 line-clamp-2">
+                            {shortDescription}
+                        </p>
+                    )}
                     
                     {/* Rating Badge */}
                     <div className="flex items-center gap-1.5 text-sm font-medium text-gray-500 dark:text-gray-400">

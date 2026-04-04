@@ -1,22 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
+import toast from 'react-hot-toast';
+import useAuth from '../../hooks/useAuth';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const BeAChef = () => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", cuisine: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (open && user?.displayName) {
+      setForm((prev) => ({ ...prev, name: prev.name || user.displayName }));
+    }
+  }, [open, user]);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    // For now we just open mail client as a simple submission action
-    const subject = encodeURIComponent("Be a Chef - Application");
-    const body = encodeURIComponent(`Name: ${form.name}\nPhone: ${form.phone}\nCuisine: ${form.cuisine}`);
-    window.location.href = `mailto:partners@yourdomain.com?subject=${subject}&body=${body}`;
-    setOpen(false);
+    if (!user?.email) {
+      toast.error("Please log in to submit your chef request.");
+      navigate("/login");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await axiosSecure.post("/requests", {
+        userName: form.name || user.displayName || "User",
+        userEmail: user.email,
+        requestType: "chef",
+        phone: form.phone,
+        cuisine: form.cuisine,
+      });
+      toast.success("Chef request submitted successfully!");
+      setOpen(false);
+      setForm({ name: user.displayName || "", phone: "", cuisine: "" });
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Request failed");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -98,8 +129,9 @@ const BeAChef = () => {
                 Apply as a Chef
               </button>
 
-              <a
-                href="#"
+              <button
+                type="button"
+                onClick={() => navigate("/about")}
                 className="
                    inline-flex items-center justify-center 
                    bg-white dark:bg-transparent
@@ -111,7 +143,7 @@ const BeAChef = () => {
                 "
               >
                 How it works
-              </a>
+              </button>
             </div>
           </div>
 
@@ -209,10 +241,11 @@ const BeAChef = () => {
                         Cancel
                     </button>
                     <button 
-                        type="submit" 
+                        type="submit"
+                        disabled={submitting}
                         className="flex-1 px-4 py-3 rounded-xl bg-[#628141] text-white hover:bg-[#4f6b32] font-bold shadow-lg shadow-green-900/20 transition-all"
                     >
-                        Submit
+                        {submitting ? "Submitting..." : "Submit"}
                     </button>
                 </div>
                 </form>

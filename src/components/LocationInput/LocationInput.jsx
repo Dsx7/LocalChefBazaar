@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 
-const LocationInput = () => {
+const LocationInput = ({ areas = [], areaCount = 0, loading }) => {
   const [postcode, setPostcode] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const navigate = useNavigate();
 
-  const suggestions = postcode.length > 2
-    ? ['1207 - Dhanmondi', '1212 - Gulshan', '1213 - Banani', '1209 - Mohammadpur', '1216 - Uttara']
-    : [];
+  const suggestions = useMemo(() => {
+    if (postcode.trim().length < 2) return [];
+    return areas
+      .filter((area) =>
+        area.name?.toLowerCase().includes(postcode.trim().toLowerCase())
+      )
+      .slice(0, 6);
+  }, [areas, postcode]);
+
+  const handleSearch = () => {
+    if (!postcode.trim()) return;
+    navigate(`/meals?deliveryArea=${encodeURIComponent(postcode.trim())}`);
+  };
 
   return (
     <section className="py-16 md:py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
@@ -55,20 +67,21 @@ const LocationInput = () => {
                 onChange={(e) => setPostcode(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                placeholder="Enter postcode (e.g. 1207)"
+                placeholder="Enter your area (e.g. Dhanmondi)"
                 className="w-full bg-transparent border-none text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0 px-4 py-3 text-base outline-none"
               />
 
-              {/* Locate Me Button */}
+              {/* Search Button */}
               <button
                 type="button"
+                onClick={handleSearch}
                 className="w-full sm:w-auto shrink-0 px-6 py-3 bg-gray-100 dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 font-medium rounded-xl flex items-center justify-center gap-2 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span className="hidden sm:inline">Locate Me</span>
+                <span className="hidden sm:inline">Find Meals</span>
               </button>
             </div>
 
@@ -76,16 +89,21 @@ const LocationInput = () => {
             {suggestions.length > 0 && (
               <div className="mt-6 animate-fadeIn">
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-                  Did you mean?
+                  Popular areas right now
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {suggestions.map((sug, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setPostcode(sug)}
+                      onClick={() => setPostcode(sug.name)}
                       className="px-4 py-1.5 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-800/30 rounded-full text-sm font-medium hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
                     >
-                      {sug}
+                      {sug.name}
+                      {typeof sug.count === "number" && (
+                        <span className="ml-2 text-xs text-amber-600/70">
+                          ({sug.count})
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -93,7 +111,15 @@ const LocationInput = () => {
             )}
             
             <p className="mt-8 text-sm text-gray-400 dark:text-gray-500">
-               Serving major areas in Dhaka. <span className="text-amber-600 dark:text-amber-500 cursor-pointer hover:underline">View Delivery Map</span>
+               {loading
+                 ? "Loading delivery areas..."
+                 : `Serving ${areaCount || areas.length} active areas in Dhaka.`}{" "}
+               <span
+                 onClick={() => navigate("/meals")}
+                 className="text-amber-600 dark:text-amber-500 cursor-pointer hover:underline"
+               >
+                 View Meals
+               </span>
             </p>
           </div>
 

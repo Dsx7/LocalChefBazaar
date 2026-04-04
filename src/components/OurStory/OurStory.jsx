@@ -1,7 +1,7 @@
-// components/OurStory.jsx
+﻿// components/OurStory.jsx
 import React from 'react';
 
-const OurStory = () => {
+const OurStory = ({ stats, loading }) => {
   return (
     <section className="py-20 md:py-32 relative overflow-hidden bg-white dark:bg-gray-900 transition-colors duration-300">
       
@@ -55,14 +55,14 @@ const OurStory = () => {
 
             <div className="space-y-6 text-gray-600 dark:text-gray-300 text-lg leading-relaxed oswald font-light">
               <p>
-                It all began in a small kitchen in Dhaka, where the smell of <strong className="text-gray-900 dark:text-white font-semibold">mutton bhuna khichuri</strong> 
-                and the sound of <strong className="text-gray-900 dark:text-white font-semibold">maacher paturi</strong> being steamed brought our family together every weekend.
-              </p>
+  It all began in a small kitchen in Dhaka, where the smell of <strong className="text-gray-900 dark:text-white font-semibold">mutton bhuna khichuri</strong>
+  and the sound of <strong className="text-gray-900 dark:text-white font-semibold">maacher paturi</strong> being steamed brought our family together every weekend.
+</p>
 
               <p>
-                We noticed something — many people in the city were missing that same <strong className="text-amber-600 dark:text-amber-500">ghoroa</strong> (homemade) taste. 
-                Busy lives, long office hours, and traffic made it hard to enjoy real home-cooked Bengali food.
-              </p>
+  We noticed something - many people in the city were missing that same <strong className="text-amber-600 dark:text-amber-500">ghoroa</strong> (homemade) taste.
+  Busy lives and long commutes made it hard to enjoy real home-cooked Bengali food.
+</p>
 
               <div className="pl-6 border-l-4 border-[#628141] py-2 my-8 bg-green-50 dark:bg-green-900/10 rounded-r-lg">
                  <p className="text-xl font-medium text-gray-800 dark:text-gray-200 italic">
@@ -71,9 +71,30 @@ const OurStory = () => {
               </div>
 
               <p>
-                In 2023, we started with just 7 home kitchens and a dream. Today, we work with hundreds of passionate home cooks who prepare food with the same care and love 
-                as they do for their own families — and we deliver it to you in under 45 minutes.
-              </p>
+  We started with a handful of home kitchens and a dream. Today, we work with passionate home cooks who prepare food with the same care and love
+  as they do for their own families - and we bring it straight to your door.
+</p>
+            </div>
+            {/* Live Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 text-center">
+                <p className="text-xs uppercase tracking-wider text-gray-400">Meals Listed</p>
+                <p className="text-2xl font-bold text-[#628141]">
+                  {loading ? "-" : stats?.totalMeals || 0}
+                </p>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 text-center">
+                <p className="text-xs uppercase tracking-wider text-gray-400">Home Chefs</p>
+                <p className="text-2xl font-bold text-[#628141]">
+                  {loading ? "-" : stats?.chefCount || 0}
+                </p>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 text-center">
+                <p className="text-xs uppercase tracking-wider text-gray-400">Avg Rating</p>
+                <p className="text-2xl font-bold text-[#628141]">
+                  {loading ? "-" : stats?.avgRating || "0.0"}
+                </p>
+              </div>
             </div>
 
             {/* Signature Area */}
@@ -98,3 +119,4 @@ const OurStory = () => {
 };
 
 export default OurStory;
+

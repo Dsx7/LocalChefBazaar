@@ -1,9 +1,24 @@
-import React, { useState } from 'react';
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+﻿import React, { useMemo, useState } from 'react';
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import useAxiosPublic from '../../hooks/useAxiosPublic';
+import { siteInfo } from '../../config/siteInfo';
 
 const Contact = () => {
   const axiosPublic = useAxiosPublic();
+  const { contact, socials } = siteInfo;
+  const addressLines = useMemo(
+    () =>
+      contact.address
+        ? contact.address.split("|").map((line) => line.trim()).filter(Boolean)
+        : [],
+    [contact.address]
+  );
+  const socialLinks = [
+    { name: "Facebook", url: socials.facebook, icon: FaFacebookF },
+    { name: "Instagram", url: socials.instagram, icon: FaInstagram },
+    { name: "Twitter", url: socials.twitter, icon: FaTwitter },
+    { name: "LinkedIn", url: socials.linkedin, icon: FaLinkedinIn },
+  ].filter((item) => item.url);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -74,8 +89,8 @@ const Contact = () => {
                 Get in Touch
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto oswald font-light">
-                Have questions about your order, our home cooks, or just want to say hello? 
-                We're here to help — drop us a message!
+                Have questions about your order, our home cooks, or just want to say hello?
+                We're here to help - drop us a message!
             </p>
         </div>
       </section>
@@ -186,7 +201,7 @@ const Contact = () => {
 
             {/* Sidebar Info */}
             <div className="space-y-8 flex flex-col">
-              {/* Contact Info Card */}
+                            {/* Contact Info Card */}
               <div className="bg-[#628141] text-white rounded-[2rem] p-8 shadow-xl relative overflow-hidden">
                 {/* Abstract Pattern */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
@@ -194,40 +209,55 @@ const Contact = () => {
                 <h3 className="text-2xl font-bold mb-8 berkshire-swash-regular">Contact Info</h3>
 
                 <div className="space-y-8">
-                  <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl shrink-0">
-                        <FaPhoneAlt />
+                  {contact.phone && (
+                    <div className="flex items-start gap-5">
+                      <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl shrink-0">
+                          <FaPhoneAlt />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-lg opacity-90">Phone</h4>
+                        <a href={`tel:${contact.phone}`} className="font-light text-white/90 hover:text-white">
+                          {contact.phone}
+                        </a>
+                        {contact.supportHours && (
+                          <p className="text-sm text-white/60 mt-1">{contact.supportHours}</p>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-lg opacity-90">Phone</h4>
-                      <p className="font-light text-white/90">+880 96 1234 5678</p>
-                      <p className="text-sm text-white/60 mt-1">9 AM – 11 PM</p>
-                    </div>
-                  </div>
+                  )}
 
-                  <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl shrink-0">
-                        <FaEnvelope />
+                  {contact.email && (
+                    <div className="flex items-start gap-5">
+                      <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl shrink-0">
+                          <FaEnvelope />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-lg opacity-90">Email</h4>
+                        <a href={`mailto:${contact.email}`} className="font-light text-white/90 hover:text-white">
+                          {contact.email}
+                        </a>
+                        <p className="text-sm text-white/60 mt-1">Reply within 24h</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-lg opacity-90">Email</h4>
-                      <p className="font-light text-white/90">support@ghoroafood.com</p>
-                      <p className="text-sm text-white/60 mt-1">Reply within 24h</p>
-                    </div>
-                  </div>
+                  )}
 
-                  <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl shrink-0">
-                        <FaMapMarkerAlt />
+                  {addressLines.length > 0 && (
+                    <div className="flex items-start gap-5">
+                      <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl shrink-0">
+                          <FaMapMarkerAlt />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-lg opacity-90">Office</h4>
+                        <p className="font-light text-white/90 leading-relaxed">
+                          {addressLines.map((line) => (
+                            <span key={line} className="block">
+                              {line}
+                            </span>
+                          ))}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-lg opacity-90">Office</h4>
-                      <p className="font-light text-white/90 leading-relaxed">
-                        House 12, Road 5, Dhanmondi<br />
-                        Dhaka 1205, Bangladesh
-                      </p>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
@@ -246,18 +276,26 @@ const Contact = () => {
                 />
               </div>
 
-              {/* Social Links */}
-              <div className="flex justify-center gap-4">
-                <a href="#" className="w-12 h-12 bg-white dark:bg-gray-800 text-gray-600 dark:text-white rounded-full flex items-center justify-center shadow-md hover:bg-[#1877F2] hover:text-white transition-all duration-300">
-                    <FaFacebookF className="text-xl" />
-                </a>
-                <a href="#" className="w-12 h-12 bg-white dark:bg-gray-800 text-gray-600 dark:text-white rounded-full flex items-center justify-center shadow-md hover:bg-[#E4405F] hover:text-white transition-all duration-300">
-                    <FaInstagram className="text-xl" />
-                </a>
-                <a href="#" className="w-12 h-12 bg-white dark:bg-gray-800 text-gray-600 dark:text-white rounded-full flex items-center justify-center shadow-md hover:bg-black hover:text-white transition-all duration-300">
-                    <FaTwitter className="text-xl" />
-                </a>
-              </div>
+                            {/* Social Links */}
+              {socialLinks.length > 0 && (
+                <div className="flex justify-center gap-4">
+                  {socialLinks.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <a
+                        key={item.name}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-12 h-12 bg-white dark:bg-gray-800 text-gray-600 dark:text-white rounded-full flex items-center justify-center shadow-md hover:bg-[#1877F2] hover:text-white transition-all duration-300"
+                        aria-label={item.name}
+                      >
+                        <Icon className="text-xl" />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
 
             </div>
           </div>
@@ -268,8 +306,12 @@ const Contact = () => {
       <section className="py-12 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 oswald font-light">
-            We usually respond within 1–2 hours during business hours.<br />
-            For urgent order issues, please <span className="text-[#ff8400] font-medium cursor-pointer underline">call us directly</span>.
+            We usually respond within 1-2 hours during business hours.<br />
+            For urgent order issues, please{" "}
+            <span className="text-[#ff8400] font-medium cursor-pointer underline">
+              call us directly
+            </span>
+            .
           </p>
         </div>
       </section>
@@ -278,3 +320,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
+

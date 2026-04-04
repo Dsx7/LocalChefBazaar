@@ -35,6 +35,7 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
       rating: meal.rating,
       estimatedDeliveryTime: meal.estimatedDeliveryTime,
       ingredients: meal.ingredients.join(", "),
+      description: meal.description || "",
       subscriptionEligible: meal.subscriptionEligible || false,
       dietaryTags: meal.dietaryTags || [],
       allergens: meal.allergens || [],
@@ -60,6 +61,7 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
       rating: data.rating,
       estimatedDeliveryTime: data.estimatedDeliveryTime,
       ingredients: data.ingredients.split(",").map(i => i.trim()),
+      description: data.description?.trim(),
       subscriptionEligible: data.subscriptionEligible === true || data.subscriptionEligible === "true",
       dietaryTags: normalizeArray(data.dietaryTags),
       allergens: normalizeArray(data.allergens),
@@ -151,6 +153,21 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
               {...register("ingredients")}
               className="w-full mt-1 px-4 py-3 border rounded-xl"
             />
+          </div>
+
+          <div>
+            <label className="font-semibold text-sm">Short Description</label>
+            <textarea
+              rows={3}
+              {...register("description", {
+                required: "Short description is required",
+                maxLength: { value: 200, message: "Max 200 characters" },
+              })}
+              className="w-full mt-1 px-4 py-3 border rounded-xl"
+            />
+            {errors.description && (
+              <p className="text-red-500 text-sm">{errors.description.message}</p>
+            )}
           </div>
 
           <div>
