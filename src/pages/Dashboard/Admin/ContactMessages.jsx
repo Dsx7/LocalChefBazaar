@@ -1,17 +1,29 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const ContactMessages = () => {
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
   const limit = 10;
+  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: ["contactMessages", page],
     queryFn: async () => {
       const res = await axiosSecure.get(`/contacts?page=${page}&limit=${limit}`);
       return res.data;
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id) => {
+      const res = await axiosSecure.delete(`/contacts/${id}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["contactMessages"]);
     },
   });
 
@@ -53,6 +65,7 @@ const ContactMessages = () => {
                   <th className="text-left px-6 py-4">Phone</th>
                   <th className="text-left px-6 py-4">Message</th>
                   <th className="text-left px-6 py-4">Date</th>
+                  <th className="text-left px-6 py-4">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -72,6 +85,14 @@ const ContactMessages = () => {
                       {item.createdAt
                         ? new Date(item.createdAt).toLocaleDateString()
                         : "—"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => deleteMutation.mutate(item._id)}
+                        className="px-3 py-1.5 rounded-lg bg-red-100 text-red-600 text-xs font-semibold hover:bg-red-200 transition"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
