@@ -5,8 +5,10 @@ import OrderPage from "../Order/OrderPage";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { FaUserAlt, FaMapMarkerAlt, FaClock, FaStar, FaLeaf } from "react-icons/fa";
+import MealCard from "../../components/Cards/MealCard";
+import MealCardSkeleton from "../../components/Loaders/MealCardSkeleton";
 
 export default function MealDetails() {
   const { user, loading: authLoading } = useAuth();
@@ -40,6 +42,49 @@ export default function MealDetails() {
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/${user?.email}`);
       return res.data;
+    },
+  });
+
+  const { data: relatedMeals = [], isLoading: relatedLoading } = useQuery({
+    queryKey: ["relatedMeals", mealId, meal?.chefName, meal?.deliveryArea],
+    enabled: !!meal?._id,
+    queryFn: async () => {
+      const fetchMeals = async (url) => {
+        const res = await axiosSecure.get(url);
+        return res.data?.meals || [];
+      };
+
+      const currentId = String(meal?._id || mealId || "");
+      const seen = new Set([currentId]);
+      let related = [];
+
+      if (meal?.chefName) {
+        const chefMeals = await fetchMeals(
+          `/meals?search=${encodeURIComponent(meal.chefName)}&limit=8&page=1`
+        );
+        chefMeals.forEach((item) => {
+          const id = String(item?._id || "");
+          if (id && !seen.has(id)) {
+            seen.add(id);
+            related.push(item);
+          }
+        });
+      }
+
+      if (related.length < 4 && meal?.deliveryArea) {
+        const areaMeals = await fetchMeals(
+          `/meals?deliveryArea=${encodeURIComponent(meal.deliveryArea)}&limit=8&page=1`
+        );
+        areaMeals.forEach((item) => {
+          const id = String(item?._id || "");
+          if (id && !seen.has(id)) {
+            seen.add(id);
+            related.push(item);
+          }
+        });
+      }
+
+      return related.slice(0, 4);
     },
   });
 
@@ -339,6 +384,44 @@ export default function MealDetails() {
                 </div>
 
             </motion.div>
+        </div>
+
+        {/* Related Meals */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                Related Meals
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Discover more dishes you might love.
+              </p>
+            </div>
+            <Link
+              to="/meals"
+              className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-[#628141] text-white text-sm font-semibold hover:bg-[#4f6b32] transition-colors"
+            >
+              Explore All Meals
+            </Link>
+          </div>
+
+          {relatedLoading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <MealCardSkeleton key={`related-skeleton-${index}`} />
+              ))}
+            </div>
+          ) : relatedMeals.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {relatedMeals.map((item) => (
+                <MealCard key={item._id} meal={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6 text-center text-gray-500 dark:text-gray-400">
+              No related meals found right now.
+            </div>
+          )}
         </div>
 
         {/* Review Section */}
