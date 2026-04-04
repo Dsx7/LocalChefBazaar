@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, EmailAuthProvider, getAuth, GoogleAuthProvider, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile } from "firebase/auth";
 import { app } from '../services/firebase.config.js';
 
 export const AuthContext = createContext();
@@ -31,6 +31,27 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider)
     }
 
+    const changePassword = async (currentPassword, newPassword) => {
+        if (!auth.currentUser) {
+            throw new Error("No authenticated user found");
+        }
+
+        const providerId = auth.currentUser.providerData?.[0]?.providerId;
+        if (providerId !== "password") {
+            throw new Error("Password update is only available for email/password accounts.");
+        }
+
+        if (currentPassword) {
+            const credential = EmailAuthProvider.credential(
+                auth.currentUser.email,
+                currentPassword
+            );
+            await reauthenticateWithCredential(auth.currentUser, credential);
+        }
+
+        return updatePassword(auth.currentUser, newPassword);
+    };
+
     const logOut = () => {
         return signOut(auth)
     }
@@ -50,6 +71,7 @@ const AuthProvider = ({ children }) => {
         updateUserProfile,
         login,
         googleLogin,
+        changePassword,
         user,
         setUser,
         logOut,
