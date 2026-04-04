@@ -3,12 +3,14 @@ import useAuth from "../../hooks/useAuth";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
-import { FaEye, FaEyeSlash, FaEnvelope, FaLock, FaUserShield, FaUserTie, FaUser } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock, FaUserShield, FaUserTie, FaUser, FaGoogle } from 'react-icons/fa';
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Login = () => {
     const [showPass, setShowPass] = useState(false);
-    const { login, setSubmissionLoader } = useAuth();
+    const { login, googleLogin, setSubmissionLoader } = useAuth();
     const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure();
 
     const {
         register,
@@ -75,6 +77,51 @@ const Login = () => {
             if (err?.message === "Firebase: Error (auth/invalid-credential).") {
                 toast.error("Email or password is invalid")
             }
+        }
+    }
+
+    const handleGoogleLogin = async () => {
+        try {
+            setSubmissionLoader(true)
+            const result = await googleLogin()
+            const googleUser = result?.user
+            const token = await googleUser?.getIdToken()
+
+            if (googleUser?.email) {
+                const userPayload = {
+                    userName: googleUser.displayName || "User",
+                    userEmail: googleUser.email,
+                    userPhoto: googleUser.photoURL || "",
+                    userAddress: "",
+                }
+
+                let existingUser = null
+                try {
+                    const res = await axiosSecure.get(`/users/${googleUser.email}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                    existingUser = res?.data
+                } catch (err) {
+                    existingUser = null
+                }
+
+                if (!existingUser?._id) {
+                    await axiosSecure.post("/users", userPayload, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                }
+            }
+
+            navigate("/")
+            toast.success("Login successful")
+            setSubmissionLoader(false)
+        } catch (err) {
+            setSubmissionLoader(false)
+            toast.error(err?.message || "Google login failed")
         }
     }
 
@@ -216,6 +263,18 @@ const Login = () => {
                                     <span className="text-xs font-bold text-gray-600 dark:text-gray-300">User</span>
                                 </button>
                             </div>
+
+                            {/* Google Login */}
+                            <button
+                                type="button"
+                                onClick={handleGoogleLogin}
+                                className="mt-4 w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                            >
+                                <FaGoogle className="text-lg text-[#ff8400]" />
+                                <span className="text-sm font-bold text-gray-700 dark:text-gray-200">
+                                    Continue with Google
+                                </span>
+                            </button>
 
                         </form>
 
