@@ -11,6 +11,7 @@ import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers"
 import ManageRequests from "../pages/Dashboard/Admin/ManageRequests"
 import PlatformStats from "../pages/Dashboard/Admin/PlatformStats"
+import ContactMessages from "../pages/Dashboard/Admin/ContactMessages";
 import MyOrders from "../pages/Dashboard/User/MyOrders";
 import MyReviews from "../pages/Dashboard/User/MyReviews";
 import Favorites from "../pages/Dashboard/User/Favorites";
@@ -105,6 +106,12 @@ export const router = createBrowserRouter([
         path: "platform-statistics",
         element: <AdminRoute>
           <PlatformStats />
+        </AdminRoute>
+      },
+      {
+        path: "contact-messages",
+        element: <AdminRoute>
+          <ContactMessages />
         </AdminRoute>
       },
       // Chef Panel

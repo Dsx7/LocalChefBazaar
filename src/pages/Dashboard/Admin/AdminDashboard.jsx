@@ -16,7 +16,8 @@ import {
     FaAngleRight,
     FaClipboardList,
     FaRegUser,
-    FaUser
+    FaUser,
+    FaEnvelope
 } from 'react-icons/fa';
 import useAuth from '../../../hooks/useAuth';
 import Switch from '../../../components/theme-change-btn/Switch';
@@ -32,6 +33,7 @@ function UserDashboard() {
         { icon: FaUser, name: "My Profile", active: true, route: "/dashboard" },
         { icon: FaUsers, name: "Mange User", route: "manage-users" },
         { icon: FaClipboardList, name: "Mange Request", route: "manage-requests" },
+        { icon: FaEnvelope, name: "Contact Messages", route: "contact-messages" },
         { icon: FaChartBar, name: "Platform Statistics", route: "platform-statistics" },
     ];
 

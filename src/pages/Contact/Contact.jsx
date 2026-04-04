@@ -1,23 +1,58 @@
 import React, { useState } from 'react';
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import useAxiosPublic from '../../hooks/useAxiosPublic';
 
 const Contact = () => {
+  const axiosPublic = useAxiosPublic();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     message: '',
   });
+  const [errors, setErrors] = useState({});
+  const [submitStatus, setSubmitStatus] = useState({ type: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Full name is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Enter a valid email";
+    }
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would handle form submission (API call, email service, etc.)
-    alert('Thank you! Your message has been sent.');
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setSubmitStatus({ type: '', message: '' });
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await axiosPublic.post('/contacts', formData);
+      setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent.' });
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: error?.response?.data?.message || 'Failed to send message. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -74,6 +109,7 @@ const Contact = () => {
                       className="w-full px-5 py-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-[#628141] focus:border-transparent transition-all"
                       placeholder="Your full name"
                     />
+                    {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -90,6 +126,7 @@ const Contact = () => {
                       className="w-full px-5 py-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-[#628141] focus:border-transparent transition-all"
                       placeholder="your@email.com"
                     />
+                    {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                   </div>
                 </div>
 
@@ -122,13 +159,27 @@ const Contact = () => {
                     className="w-full px-5 py-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-[#628141] focus:border-transparent transition-all resize-none"
                     placeholder="How can we help you today?"
                   />
+                  {errors.message && <p className="text-sm text-red-500">{errors.message}</p>}
                 </div>
+
+                {submitStatus.message && (
+                  <div
+                    className={`text-sm font-semibold ${
+                      submitStatus.type === 'success' ? 'text-green-600' : 'text-red-500'
+                    }`}
+                  >
+                    {submitStatus.message}
+                  </div>
+                )}
 
                 <button
                   type="submit"
-                  className="w-full md:w-auto px-10 py-4 bg-[#628141] hover:bg-[#4f6b32] text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-green-900/20 transform hover:-translate-y-1"
+                  disabled={isSubmitting}
+                  className={`w-full md:w-auto px-10 py-4 text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-green-900/20 transform hover:-translate-y-1 ${
+                    isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#628141] hover:bg-[#4f6b32]"
+                  }`}
                 >
-                  Send Message
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>
