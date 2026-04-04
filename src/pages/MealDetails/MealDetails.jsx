@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import ReviewDetails from "./ReviewDetails";
 import OrderPage from "../Order/OrderPage";
@@ -42,6 +42,19 @@ export default function MealDetails() {
       return res.data;
     },
   });
+
+  const galleryImages = useMemo(() => {
+    const images = [meal?.foodImage, ...(meal?.foodImages || [])].filter(Boolean);
+    return Array.from(new Set(images));
+  }, [meal]);
+
+  const [activeImage, setActiveImage] = useState("");
+
+  useEffect(() => {
+    if (galleryImages.length > 0) {
+      setActiveImage(galleryImages[0]);
+    }
+  }, [galleryImages]);
 
   // All loading states
   if (authLoading || isLoading || customerLoading) {
@@ -97,12 +110,13 @@ export default function MealDetails() {
                 className="absolute inset-0"
             >
                 <img
-                    src={meal?.foodImage || "/placeholder.jpg"}
+                    src={activeImage || meal?.foodImage || "/placeholder.jpg"}
                     alt={meal?.foodName}
                     className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-50 via-transparent to-transparent dark:from-gray-900" />
             </motion.div>
+
         </div>
 
         {/* Content Container - Floating Up */}
@@ -139,6 +153,29 @@ export default function MealDetails() {
                         </span>
                     </div>
                 </div>
+
+                {galleryImages.length > 1 && (
+                    <div className="mb-6">
+                        <div className="flex gap-2 overflow-x-auto pb-1">
+                            {galleryImages.map((img) => (
+                                <button
+                                    key={img}
+                                    type="button"
+                                    onClick={() => setActiveImage(img)}
+                                    className={`h-14 w-20 flex-shrink-0 rounded-lg overflow-hidden border-2 transition ${
+                                        activeImage === img ? "border-[#ff8400]" : "border-transparent"
+                                    }`}
+                                >
+                                    <img
+                                        src={img}
+                                        alt="Meal preview"
+                                        className="h-full w-full object-cover"
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
                     {/* Left Column: Chef & Delivery Info */}

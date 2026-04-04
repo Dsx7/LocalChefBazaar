@@ -81,13 +81,16 @@ const CreateMeal = () => {
     });
 
     const handleMeal = async (data) => {
-        const { foodName, chefName, price, rating, foodMetarials, estimatedDeliveryTime, chefExperience, chefId, userEmail, foodImg, deliveryArea } = data;
+        const { foodName, chefName, price, rating, foodMetarials, estimatedDeliveryTime, chefExperience, chefId, userEmail, foodImg, deliveryArea, additionalImages } = data;
         if (!foodImg) {
             setError("foodImg", { message: "Food image is required" });
             return;
         }
         const normalizeArray = (value) =>
             Array.isArray(value) ? value : value ? [value] : [];
+        const extraImages = additionalImages
+            ? additionalImages.split(",").map((item) => item.trim()).filter(Boolean)
+            : [];
         const ingredients = foodMetarials.split(",").map(item => item.trim());
         const foodImage = await imgUploader(foodImg)
         const mealsData = {
@@ -104,6 +107,7 @@ const CreateMeal = () => {
             deliveryArea,
             dietaryTags: normalizeArray(data.dietaryTags),
             allergens: normalizeArray(data.allergens),
+            foodImages: extraImages,
             nutrition: {
                 calories: Number(data.calories || 0),
                 protein: Number(data.protein || 0),
@@ -208,6 +212,18 @@ const CreateMeal = () => {
                                 {errors.foodImg.message}
                             </p>
                         )}
+                    </div>
+
+                    <div className="col-span-1 md:col-span-2">
+                        <label className="block text-gray-700 font-semibold mb-1 dark:text-primary">
+                            Additional Image URLs (comma separated)
+                        </label>
+                        <input
+                            type="text"
+                            placeholder="https://... , https://..."
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                            {...register("additionalImages")}
+                        />
                     </div>
 
                     <div>
@@ -467,3 +483,4 @@ const CreateMeal = () => {
     );
 }
 export default CreateMeal;
+

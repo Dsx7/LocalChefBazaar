@@ -42,12 +42,17 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
       protein: meal?.nutrition?.protein || "",
       carbs: meal?.nutrition?.carbs || "",
       fat: meal?.nutrition?.fat || "",
+      additionalImages: meal.foodImages?.join(", ") || "",
     },
   });
 
   const onSubmit = async (data) => {
     const normalizeArray = (value) =>
       Array.isArray(value) ? value : value ? [value] : [];
+
+    const extraImages = data.additionalImages
+      ? data.additionalImages.split(",").map((item) => item.trim()).filter(Boolean)
+      : [];
 
     const updatedMeal = {
       foodName: data.foodName,
@@ -58,6 +63,7 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
       subscriptionEligible: data.subscriptionEligible === true || data.subscriptionEligible === "true",
       dietaryTags: normalizeArray(data.dietaryTags),
       allergens: normalizeArray(data.allergens),
+      foodImages: extraImages,
       nutrition: {
         calories: Number(data.calories || 0),
         protein: Number(data.protein || 0),
@@ -219,6 +225,18 @@ const MealsUpdateModal = ({ meal, onClose, refetch }) => {
                 className="w-full px-4 py-3 border rounded-xl"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="font-semibold text-sm">
+              Additional Image URLs (comma separated)
+            </label>
+            <input
+              type="text"
+              placeholder="https://... , https://..."
+              {...register("additionalImages")}
+              className="w-full mt-2 px-4 py-3 border rounded-xl"
+            />
           </div>
 
           <div className="flex items-center gap-3">
